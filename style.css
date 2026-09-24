@@ -1,0 +1,785 @@
+/* ==========================================================================
+   【日程管理】HTML互動看板 - 全局樣式規範 (Style Specification)
+   Palette:
+   - ASH EGGSHELL: #DACABF (主要背景與留白)
+   - SPECKLED SLATE: #4A3934 (主要文字與邊界線條)
+   - PUMPKIN: #98341F (Accent 1 / 高優先)
+   - YOLK: #E19956 (Accent 2 / 中優先)
+   - CEFRADINE: #D3A878 (Accent 3 / 低優先)
+   ========================================================================== */
+
+:root {
+  --bg-color: #DACABF;
+  --bg-card: #FAF6F0;
+  --bg-sidebar: #ECE3DB;
+  --text-color: #4A3934;
+  --border-color: #4A3934;
+  --border-light: rgba(74, 57, 52, 0.2);
+
+  /* Accents */
+  --pumpkin: #98341F;
+  --pumpkin-hover: #7E2B19;
+  --yolk: #E19956;
+  --yolk-hover: #D18541;
+  --cefradine: #D3A878;
+  --cefradine-hover: #C29665;
+
+  /* Holiday / Weekend highlight */
+  --holiday-bg: rgba(152, 52, 31, 0.08);
+  --weekend-bg: rgba(225, 153, 86, 0.08);
+  --today-bg: rgba(211, 168, 120, 0.25);
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 9999px;
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow: 0 4px 12px rgba(74, 57, 52, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.5;
+}
+
+/* ==========================================
+   響應式主要容器 (App Container)
+   ========================================== */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100vw;
+}
+
+/* 手機版 Top Header */
+.mobile-header {
+  display: none;
+  background-color: var(--bg-sidebar);
+  border-bottom: 2px solid var(--border-color);
+  padding: 12px 16px;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+}
+
+.mobile-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.mobile-date {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--pumpkin);
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+/* 遮罩層 */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(74, 57, 52, 0.4);
+  backdrop-filter: blur(2px);
+  z-index: 99;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+/* ==========================================
+   1. 側邊欄 (Sidebar - 縮減 20% 緊湊儀表板)
+   ========================================== */
+.sidebar {
+  width: 16%;
+  min-width: 200px;
+  max-width: 256px;
+  background-color: var(--bg-sidebar);
+  border-right: 2px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  padding: 16px 12px;
+  z-index: 100;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+}
+
+.sidebar-close-btn {
+  display: none;
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+/* 時間顯示區 */
+.time-display {
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px 8px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.time-year {
+  font-size: 0.78rem;
+  font-weight: 600;
+  opacity: 0.8;
+  letter-spacing: 1px;
+}
+
+.time-date {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--pumpkin);
+  margin: 2px 0;
+}
+
+.time-sub {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.sidebar-divider {
+  border: none;
+  border-top: 1.5px dashed var(--border-color);
+  margin: 12px 0;
+  opacity: 0.5;
+}
+
+/* 大項目選單 */
+.nav-group-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 5px;
+  background-color: transparent;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  color: var(--text-color);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+}
+
+.nav-btn:hover:not(.disabled) {
+  background-color: var(--bg-card);
+  border-color: var(--border-light);
+  transform: translateX(3px);
+}
+
+.nav-btn.active {
+  background-color: var(--bg-card);
+  border-color: var(--border-color);
+  color: var(--pumpkin);
+  box-shadow: var(--shadow);
+}
+
+.nav-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.badge {
+  font-size: 0.65rem;
+  background: var(--cefradine);
+  color: #fff;
+  padding: 2px 5px;
+  border-radius: var(--radius-pill);
+  margin-left: auto;
+}
+
+/* 下段選單 */
+.sub-nav {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sub-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 10px;
+  background: transparent;
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  color: var(--text-color);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.sub-nav-btn:hover {
+  background-color: var(--bg-card);
+  border-color: var(--border-color);
+  color: var(--pumpkin);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-left: auto;
+  display: inline-block;
+}
+.status-dot.connected { background-color: #2e7d32; }
+.status-dot.disconnected { background-color: #d32f2f; }
+
+/* ==========================================
+   2. 主要展示區 (Main Display - 佔畫面 84%)
+   ========================================== */
+.main-content {
+  flex: 1;
+  width: 84%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+.main-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-left h1 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-color);
+}
+
+.usage-tip {
+  font-size: 0.85rem;
+  margin-top: 4px;
+  opacity: 0.85;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 按鈕風格 (微圓角) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  border: 2px solid var(--border-color);
+}
+
+.btn-primary {
+  background-color: var(--pumpkin);
+  color: #ffffff;
+  border-color: var(--pumpkin);
+}
+.btn-primary:hover {
+  background-color: var(--pumpkin-hover);
+  border-color: var(--pumpkin-hover);
+}
+
+.btn-secondary {
+  background-color: var(--bg-card);
+  color: var(--text-color);
+}
+.btn-secondary:hover {
+  background-color: var(--cefradine);
+  color: #fff;
+}
+
+.btn-danger {
+  background-color: #c62828;
+  color: #fff;
+  border-color: #c62828;
+}
+.btn-danger:hover {
+  background-color: #b71c1c;
+}
+
+.sync-banner {
+  background: var(--yolk);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 16px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* ==========================================
+   時間軸網格 (Timeline Board Grid)
+   ========================================== */
+.board-wrapper {
+  flex: 1;
+  background-color: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+  overflow: auto;
+  position: relative;
+}
+
+.timeline-board {
+  display: grid;
+  width: 100%;
+  min-width: 800px;
+}
+
+/* 表頭橫向 X 軸與 Y 軸列卡片 */
+.grid-cell {
+  border-right: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  padding: 8px;
+  min-height: 70px;
+  position: relative;
+  background-color: transparent;
+  transition: background-color 0.15s ease;
+}
+
+.grid-cell.cell-drag-over {
+  background-color: rgba(225, 153, 86, 0.3) !important;
+  outline: 2px dashed var(--pumpkin);
+}
+
+/* 表頭 (Date Headers) */
+.header-cell {
+  background-color: var(--bg-sidebar);
+  border-bottom: 2px solid var(--border-color);
+  font-weight: 700;
+  text-align: center;
+  padding: 10px 6px;
+  min-height: 55px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-cell .day-name {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.header-cell .day-num {
+  font-size: 1.1rem;
+  color: var(--text-color);
+}
+
+.header-cell.is-today {
+  background-color: var(--today-bg);
+  color: var(--pumpkin);
+}
+
+.header-cell.is-weekend {
+  color: var(--pumpkin);
+  background-color: var(--weekend-bg);
+}
+
+.header-cell.is-holiday {
+  background-color: var(--holiday-bg);
+  color: var(--pumpkin);
+}
+
+.holiday-tag {
+  font-size: 0.68rem;
+  background: var(--pumpkin);
+  color: #fff;
+  padding: 1px 4px;
+  border-radius: var(--radius-sm);
+  margin-top: 2px;
+}
+
+/* 直向 Y 軸項目 (Category Headers) */
+.y-axis-header {
+  background-color: var(--bg-sidebar);
+  border-right: 2px solid var(--border-color);
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  position: sticky;
+  left: 0;
+  z-index: 10;
+}
+
+.y-axis-header .cat-title {
+  word-break: break-all;
+}
+
+.y-axis-add-cell {
+  background-color: var(--bg-sidebar);
+  border-right: 2px solid var(--border-color);
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+.btn-add-y-axis {
+  width: 100%;
+  padding: 8px;
+  border: 2px dashed var(--border-color);
+  background: transparent;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  color: var(--pumpkin);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-add-y-axis:hover {
+  background: var(--bg-card);
+  transform: scale(1.02);
+}
+
+/* ==========================================
+   3. 任務圓角膠囊 (Capsule Task Block)
+   ========================================== */
+.capsule-task {
+  border-radius: var(--radius-pill);
+  padding: 6px 12px;
+  margin-bottom: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: grab;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  word-break: break-word;
+}
+
+.capsule-task:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+}
+
+.capsule-task:active {
+  cursor: grabbing;
+}
+
+.capsule-task.dragging {
+  opacity: 0.4;
+}
+
+.capsule-task.completed {
+  text-decoration: line-through;
+  opacity: 0.65;
+}
+
+/* 顏色分類 */
+.capsule-task.bg-PUMPKIN {
+  background-color: var(--pumpkin);
+}
+.capsule-task.bg-YOLK {
+  background-color: var(--yolk);
+}
+.capsule-task.bg-CEFRADINE {
+  background-color: var(--cefradine);
+  color: var(--text-color);
+}
+
+.task-checkbox {
+  cursor: pointer;
+  width: 14px;
+  height: 14px;
+  accent-color: var(--border-color);
+}
+
+.task-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ==========================================
+   MODAL 對話框樣式 (Rounded Modals)
+   ========================================== */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(74, 57, 52, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background-color: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  padding: 24px;
+  animation: modalFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-sm {
+  max-width: 400px;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(15px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 1.5px solid var(--border-light);
+}
+
+.modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  color: var(--text-color);
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* 表單元件 */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.required {
+  color: var(--pumpkin);
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background-color: #ffffff;
+  color: var(--text-color);
+  font-size: 0.92rem;
+  font-family: inherit;
+  transition: var(--transition);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--pumpkin);
+  box-shadow: 0 0 0 3px rgba(152, 52, 31, 0.15);
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-row .col {
+  flex: 1;
+}
+
+.checkbox-group {
+  margin-top: 8px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 14px;
+  border-top: 1.5px solid var(--border-light);
+}
+
+.footer-right {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.gas-help-box {
+  background-color: var(--bg-sidebar);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  font-size: 0.85rem;
+  margin-top: 12px;
+}
+
+.test-result {
+  margin-top: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+/* Toast 通知 */
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast {
+  background: var(--text-color);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+  font-weight: 600;
+  font-size: 0.9rem;
+  animation: toastIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ==========================================
+   行動裝置 響應式微調 (RWD Rules)
+   ========================================== */
+@media (max-width: 768px) {
+  .mobile-header {
+    display: flex;
+  }
+
+  .sidebar-close-btn {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    max-width: 85vw;
+    transform: translateX(-100%);
+    box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
+  .main-content {
+    width: 100%;
+    padding: 14px;
+  }
+
+  .header-left h1 {
+    font-size: 1.3rem;
+  }
+
+  .header-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .timeline-board {
+    min-width: 650px;
+  }
+}
